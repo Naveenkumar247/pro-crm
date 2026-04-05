@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans p-6">
+
+    <div class="max-w-2xl mx-auto mt-10">
+        <a href="/" class="text-blue-500 hover:underline mb-4 inline-block">← Back to Dashboard</a>
+        
+        <div id="profile-card" class="bg-white p-8 rounded-lg shadow hidden">
+            <div class="flex justify-between items-start border-b pb-4 mb-4">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-800" id="u-name">Loading...</h2>
+                    <p class="text-gray-500" id="u-username">@username</p>
+                </div>
+                <div id="u-status"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-sm font-bold text-gray-400 uppercase">Contact Info</h3>
+                    <p class="mt-2 text-gray-800"><strong>Phone:</strong> <span id="u-phone"></span></p>
+                    <p class="mt-1 text-gray-800"><strong>Email:</strong> <span id="u-email"></span></p>
+                    <p class="mt-1 text-gray-800"><strong>Address:</strong> <span id="u-address"></span></p>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-bold text-gray-400 uppercase">Plan Details</h3>
+                    <p class="mt-2 text-gray-800"><strong>Plan:</strong> <span id="u-plan"></span></p>
+                    <p class="mt-1 text-gray-800"><strong>Duration:</strong> <span id="u-duration"></span></p>
+                    <p class="mt-1 text-gray-800"><strong>Aadhar:</strong> <span id="u-aadhar"></span></p>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t flex flex-col items-center">
+                <h3 class="text-sm font-bold text-gray-400 uppercase mb-4">User QR Code</h3>
+                <img id="u-qr" src="" class="w-40 h-40 border-2 border-gray-200 rounded-lg shadow" alt="QR Code">
+                <a id="u-download" href="#" download class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded transition">Download QR</a>
+            </div>
+        </div>
+
+        <div id="error-msg" class="text-red-500 text-center font-bold mt-10 hidden">User not found.</div>
+    </div>
+
+    <script>
+        // Get username from the URL path
+        const username = window.location.pathname.split('/').pop();
+
+        fetch(`/api/users/${username}`)
+            .then(res => {
+                if(!res.ok) throw new Error("Not found");
+                return res.json();
+            })
+            .then(user => {
+                document.getElementById('profile-card').classList.remove('hidden');
+                
+                document.getElementById('u-name').innerText = user.name;
+                document.getElementById('u-username').innerText = `@${user.username}`;
+                document.getElementById('u-phone').innerText = user.phonenumber;
+                document.getElementById('u-email').innerText = user.email;
+                document.getElementById('u-address').innerText = user.address;
+                document.getElementById('u-plan').innerText = user.plan;
+                document.getElementById('u-duration').innerText = user.planDuration;
+                document.getElementById('u-aadhar').innerText = user.aadhar || 'N/A';
+                
+                document.getElementById('u-status').innerHTML = user.active 
+                    ? `<span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-bold shadow-sm">Active</span>`
+                    : `<span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold shadow-sm">Inactive</span>`;
+                
+                document.getElementById('u-qr').src = user.qrCode;
+                document.getElementById('u-download').href = user.qrCode;
+                document.getElementById('u-download').download = `${user.username}-QR.png`;
+            })
+            .catch(err => {
+                document.getElementById('error-msg').classList.remove('hidden');
+            });
+    </script>
+</body>
+</html>

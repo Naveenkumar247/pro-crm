@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan QR Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans h-screen flex flex-col items-center pt-10">
+
+    <div class="max-w-md w-full bg-white text-gray-800 p-6 rounded-lg shadow-xl text-center">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold">Scanner</h2>
+            <a href="/" class="text-blue-500 text-sm hover:underline">Cancel</a>
+        </div>
+        
+        <div id="reader" class="w-full rounded overflow-hidden"></div>
+        
+        <p id="scan-status" class="mt-4 text-sm text-gray-500">Requesting camera permissions...</p>
+    </div>
+
+    <script>
+        function onScanSuccess(decodedText, decodedResult) {
+            document.getElementById('scan-status').innerText = "QR Found! Redirecting...";
+            document.getElementById('scan-status').classList.add('text-green-600', 'font-bold');
+            
+            // Your QR code looks like: mongodb+srv://.../user/johndoe123
+            // We need to extract 'johndoe123' from the end of it.
+            const parts = decodedText.split('/user/');
+            
+            if (parts.length > 1) {
+                const username = parts[1];
+                // Redirect to the user's profile page
+                window.location.href = `/user/${username}`;
+            } else {
+                alert("Invalid CRM QR Code format scanned.");
+                html5QrcodeScanner.resume();
+            }
+        }
+
+        function onScanFailure(error) {
+            // handle scan failure, usually better to ignore and keep scanning
+        }
+
+        // Initialize the scanner
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader",
+            { fps: 10, qrbox: {width: 250, height: 250} },
+            /* verbose= */ false
+        );
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        
+        // Update text once camera is active
+        setTimeout(() => {
+            document.getElementById('scan-status').innerText = "Point camera at User QR Code";
+        }, 3000);
+    </script>
+</body>
+</html>
