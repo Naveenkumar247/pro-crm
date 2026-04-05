@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add CRM User</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body class="bg-gray-100 font-sans p-6">
+
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Create New User</h2>
+            <a href="/" class="text-blue-500 hover:underline">← Back to Dashboard</a>
+        </div>
+
+        <form action="/api/users" method="POST" class="space-y-4">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-600 text-sm font-bold mb-1">Full Name *</label>
+                    <input type="text" name="name" required class="w-full p-2 border rounded outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-gray-600 text-sm font-bold mb-1">Phone Number *</label>
+                    <input type="text" name="phonenumber" required class="w-full p-2 border rounded outline-none focus:border-blue-500">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-600 text-sm font-bold mb-1">Email Address *</label>
+                    <input type="email" name="email" required class="w-full p-2 border rounded outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-gray-600 text-sm font-bold mb-1">Aadhar Number (Optional)</label>
+                    <input type="text" name="aadhar" class="w-full p-2 border rounded outline-none focus:border-blue-500">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-gray-600 text-sm font-bold mb-1">Address *</label>
+                <textarea name="address" required class="w-full p-2 border rounded outline-none focus:border-blue-500"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-gray-600 text-sm font-bold mb-1">Plan *</label>
+                    <select name="plan" required class="w-full p-2 border rounded bg-white">
+                        <option value="Basic">Basic</option>
+                        <option value="Pro">Pro</option>
+                        <option value="Enterprise">Enterprise</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-600 text-sm font-bold mb-1">Plan Duration *</label>
+                    <select name="planDuration" required class="w-full p-2 border rounded bg-white">
+                        <option value="1 Month">1 Month</option>
+                        <option value="6 Months">6 Months</option>
+                        <option value="1 Year">1 Year</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-600 text-sm font-bold mb-1">Status *</label>
+                    <select name="active" required class="w-full p-2 border rounded bg-white">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded mt-4 transition">
+                Save User & Generate URL
+            </button>
+        </form>
+    </div>
+
+</body>
+</html>
